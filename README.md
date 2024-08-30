@@ -75,60 +75,58 @@ import { rulesets } from "@morten-olsen/gitlaw/rules/rulesets";
 
 const token = process.env.GITHUB_TOKEN;
 if (!token) {
-throw new Error("GITHUB_TOKEN is required");
+  throw new Error("GITHUB_TOKEN is required");
 }
 
 const config = defineConfig({
-configLocation: ".github/law.yml",
-auth: {
-token,
-},
-rules: {
-basic: basic({
-// Only consider private repos compliant
-visiblity: 'private',
-}),
-rulesets: rulesets({
-// Only consider the repo in compliance if the main
-// branch is protected
-requireMainBranchProtection: true,
-// Only consider the repo in compliance if it
-// require at least one PR review to merge
-minimumReviewers: 1,
-// Only consider the repo in compliance it it
-// does not allow admin overrides
-allowOverride: false,
-}),
-codeowner: codeowner({
-// Only consider the repo in compliance it is
-// protects the gitlaw file in it's CODEOWNERS file
-requireProtection: true
-}),
-secrets: secrets({
-managedSecrets: [
-{
-// Make a secret named "SECRET" available to repos
-// that are in compliance
-name: "SECRET",
-get: () => process.env.SECRET!,
-},
-],
-}),
-},
-emergency: {
-approval: async ({ pr }) => {
-console.log("Approving PR", pr);
-return {
-type: "allow",
-};
-},
-},
+  configLocation: ".github/law.yml",
+  auth: {
+    token,
+  },
+  rules: {
+    basic: basic({
+      // Only consider private repos compliant
+      visiblity: 'private',
+    }),
+    rulesets: rulesets({
+      // Only consider the repo in compliance if the main
+      // branch is protected
+      requireMainBranchProtection: true,
+      // Only consider the repo in compliance if it
+      // require at least one PR review to merge
+      minimumReviewers: 1,
+      // Only consider the repo in compliance it it
+      // does not allow admin overrides
+      allowOverride: false,
+    }),
+    codeowner: codeowner({
+      // Only consider the repo in compliance it is
+      // protects the gitlaw file in it's CODEOWNERS file
+      requireProtection: true
+    }),
+    secrets: secrets({
+      managedSecrets: [
+        {
+          // Make a secret named "SECRET" available to repos
+          // that are in compliance
+          name: "SECRET",
+          get: () => process.env.SECRET!,
+        },
+      ],
+    }),
+  },
+  emergency: {
+    approval: async ({ pr }) => {
+      console.log("Approving PR", pr);
+      return {
+        type: "allow",
+      };
+    },
+  },
 });
 
 export { config };
-
 ```
 
 </details>
 </summary>
-```
