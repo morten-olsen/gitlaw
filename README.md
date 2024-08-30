@@ -116,8 +116,14 @@ const config = defineConfig({
     }),
   },
   emergency: {
-    approval: async ({ pr }) => {
-      console.log("Approving PR", pr);
+    approval: async ({ pr, repo, actor }) => {
+      if (isWorkHours() {
+        return {
+          type: 'deny',
+          reason: 'Emergency approvals are only allowed outside if work hours
+        }
+      },
+      sendSlackMessage(`An emergency deployment was performed by ${actor} on ${repo.owner}/${repo.name} PR ${pr}`);
       return {
         type: "allow",
       };
