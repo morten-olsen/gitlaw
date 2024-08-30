@@ -1,5 +1,5 @@
 {
-  "name": "@morten-olsen/gitlaw",
+  "name": "gitlaw",
   "version": "0.1.0",
   "description": "",
   "license": "GPL-3.0-only",
@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "@octokit/action": "^7.0.0",
+    "@octokit/request": "^9.1.3",
     "@octokit/rest": "^21.0.2",
     "commander": "^12.1.0",
     "libsodium-wrappers": "^0.7.15",

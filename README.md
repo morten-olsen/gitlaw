@@ -66,7 +66,7 @@ Here’s a sample configuration to show how you might set up GitLaw:
 <summary>
   <details>
     
-```js
+```
 import { defineConfig } from "@morten-olsen/gitlaw";
 import { basic } from "@morten-olsen/gitlaw/rules/basic";
 import { secrets } from "@morten-olsen/gitlaw/rules/secrets";
