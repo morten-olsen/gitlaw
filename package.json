@@ -1,0 +1,40 @@
+{
+  "name": "@morten-olsen/gitlaw",
+  "version": "0.1.0",
+  "description": "",
+  "license": "GPL-3.0-only",
+  "type": "module",
+  "main": "dist/gitlaw.js",
+  "bin": {
+    "gitlaw": "bin/cli.js"
+  },
+  "scripts": {
+    "build": "tsc --build",
+    "apply": "pnpm tsx src/runners/cli.ts single -c demo.config.ts morten-olsen u3",
+    "cli": "pnpm tsx src/runners/cli.ts"
+  },
+  "exports": {
+    ".": "./dist/gitlaw.js",
+    "./rules/*": "./dist/rules/*/rule.js"
+  },
+  "devDependencies": {
+    "@types/libsodium-wrappers": "^0.7.14",
+    "@types/micromatch": "^4.0.9",
+    "@types/node": "^22.5.1",
+    "dotenv": "^16.4.5",
+    "tsx": "^4.19.0",
+    "typescript": "^5.5.4"
+  },
+  "dependencies": {
+    "@octokit/action": "^7.0.0",
+    "@octokit/rest": "^21.0.2",
+    "commander": "^12.1.0",
+    "libsodium-wrappers": "^0.7.15",
+    "micromatch": "^4.0.8",
+    "octokit": "^4.0.2",
+    "source-map-support": "^0.5.21",
+    "ts-node": "^10.9.2",
+    "yaml": "^2.5.0",
+    "zod": "^3.23.8"
+  }
+}
