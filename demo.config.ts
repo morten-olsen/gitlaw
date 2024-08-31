@@ -1,9 +1,8 @@
 import 'dotenv/config';
 import { defineConfig } from "./src/config/config.js";
 import { basic } from './src/rules/basic/rule.js';
-import { secrets } from './src/rules/secrets/rule.js';
-import { codeowner } from './src/rules/codeowner/rule.js';
 import { rulesets } from './src/rules/rulesets/rule.js';
+import { environments } from './src/rules/environments/rule.js';
 
 const token = process.env.GITHUB_TOKEN;
 if (!token) {
@@ -18,15 +17,28 @@ const config = defineConfig({
   rules: {
     basic: basic({}),
     rulesets: rulesets({}),
-    codeowner: codeowner({}),
-    secrets: secrets({
-      managedSecrets: [
-        {
-          name: 'SECRET',
-          get: () => process.env.SECRET!,
+    environments: environments({
+      knownEnvironments: {
+        prod: {
+          only: {
+            defaultBranch: true,
+          },
+          secrets: {
+            NPM_TOKEN: {
+              get: () => process.env.NPM_TOKEN!,
+            }
+          }
         },
-      ],
-    })
+        stage: {
+          only: {
+            defaultBranch: true,
+          },
+        },
+        test: {
+
+        },
+      }
+    }),
   },
   emergency: {
     approval: async ({ pr }) => {

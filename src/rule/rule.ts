@@ -4,7 +4,9 @@ import { Octokit } from "@octokit/rest";
 import { ValidationContext, ValidationMessage } from "./rule.validation.js";
 import { GithubRequest } from "../config/config.js";
 
-type BaseOptions<TConfig extends z.ZodSchema> = {
+type ZodRuleType = z.ZodTypeAny;
+
+type BaseOptions<TConfig extends ZodRuleType> = {
   configLocation: string;
   request: GithubRequest;
   repo: {
@@ -15,7 +17,7 @@ type BaseOptions<TConfig extends z.ZodSchema> = {
   config?: z.infer<TConfig>;
 }
 
-type Rule<TConfig extends z.ZodSchema = z.ZodObject<any, any>> = {
+type Rule<TConfig extends ZodRuleType = any> = {
   readonly schema: TConfig;
   apply?: (options: BaseOptions<TConfig> & {
     filesystem: RepoReadFileSystem;
@@ -35,11 +37,11 @@ type Rule<TConfig extends z.ZodSchema = z.ZodObject<any, any>> = {
   }) => Promise<void>;
 };
 
-const defineRule = <TConfig extends z.ZodSchema>(schema: TConfig, rule: Omit<Rule<TConfig>, 'schema'>): Rule<TConfig> => {
+const defineRule = <TConfig extends ZodRuleType>(schema: TConfig, rule: Omit<Rule<TConfig>, 'schema'>): Rule<TConfig> => {
   return {
     schema,
     ...rule,
   };
 }
 
-export { defineRule, type Rule, ValidationContext };
+export { defineRule, type Rule, type ZodRuleType, ValidationContext };
