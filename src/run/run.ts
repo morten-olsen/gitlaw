@@ -4,6 +4,7 @@ import { RepoReadFileSystem } from "../repo/repo.read.js";
 import { Octokit } from "@octokit/rest";
 import YAML from "yaml";
 import { GithubRequest } from "../config/config.js";
+import { ReportInputRepo } from "../report/reports.types.js";
 
 type GetRuleObject<TRules extends Record<string, Rule>> = {
   [K in keyof TRules]: TRules[K] extends Rule ? z.infer<TRules[K]['schema']> : never;
@@ -177,22 +178,42 @@ class Run<TRules extends Record<string, Rule>> {
     }
   }
 
-  public full = async () => {
+  public full = async (): Promise<ReportInputRepo> => {
+    const result: ReportInputRepo = {
+      owner: this.#options.repo.owner,
+      repo: this.#options.repo.name,
+      parseError: undefined,
+      configured: false,
+      applied: false,
+      isValid: false,
+      validations: [],
+      enrolled: false,
+      unrolled: false,
+    };
     const config = await this.getConfig();
+    result.configured = config.hasConfig;
     if (!config.hasConfig || config.parseErrors) {
-      return;
+      if (config.parseErrors) {
+        result.parseError = config.parseErrors;
+      }
+      return result;
     }
     await this.apply();
+    result.applied = true;
     if (this.#options.enforce) {
       await this.enforce();
     }
     const validate = await this.validate();
+    result.isValid = validate.isValid;
+    result.validations = validate.messages;
     if (validate.isValid) {
       await this.enroll();
+      result.enrolled = true;
     } else {
       await this.unroll();
+      result.unrolled = true;
     }
-    return validate;
+    return result;
   }
 }
 

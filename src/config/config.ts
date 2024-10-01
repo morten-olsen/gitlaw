@@ -28,6 +28,7 @@ const loadConfig = async (path: string): Promise<{
   octo: Octokit;
   config: Config<Record<string, Rule>>;
   scanner: Scanner;
+  rules: Record<string, Rule>;
 }> => {
   if (!existsSync(path)) {
     throw new Error(`Config file not found: ${path}`);
@@ -50,7 +51,7 @@ const loadConfig = async (path: string): Promise<{
     rules,
   });
 
-  return { octo, config, scanner };
+  return { octo, config, scanner, rules };
 }
 
 export { defineConfig, loadConfig, type Config, type GithubRequest };
